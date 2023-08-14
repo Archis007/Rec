@@ -1,0 +1,372 @@
+1.
+//Calculate the Length: Create a recursive function to find the length (number of nodes) of a linked list. The function should count the number of nodes by recursively calling itself with the next node until it reaches the end.
+
+  #include <stdio.h>
+#include <stdlib.h>
+
+// Define a linked list node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Function to create a new node
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Recursive function to find the length of a linked list
+int findLength(struct Node *node) {
+    if (node == NULL)
+        return 0;
+
+    // Recursively call the function with the next node
+    return 1 + findLength(node->next);
+}
+
+int main() {
+    // Create a sample linked list: 1 -> 2 -> 3 -> 4 -> NULL
+    struct Node *head = createNode(1);
+    head->next = createNode(2);
+    head->next->next = createNode(3);
+    head->next->next->next = createNode(4);
+
+    int length = findLength(head);
+    printf("Length of the linked list: %d\n", length);
+
+    // Free the memory occupied by the linked list
+    struct Node *current = head;
+    while (current != NULL) {
+        struct Node *temp = current;
+        current = current->next;
+        free(temp);
+    }
+
+    return 0;
+}
+2.
+Search for an Element: Implement a recursive function to search for a specific value in the linked list. The function should traverse the list by calling itself with the next node until it finds the target value or reaches the end.
+  #include <stdio.h>
+#include <stdlib.h>
+
+// Define a linked list node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Function to create a new node
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Recursive function to search for a value in a linked list
+int searchValue(struct Node *node, int target) {
+    if (node == NULL)
+        return 0; // Value not found
+    
+    if (node->data == target)
+        return 1; // Value found
+    
+    // Recursively call the function with the next node
+    return searchValue(node->next, target);
+}
+
+int main() {
+    // Create a sample linked list: 10 -> 20 -> 30 -> 40 -> NULL
+    struct Node *head = createNode(10);
+    head->next = createNode(20);
+    head->next->next = createNode(30);
+    head->next->next->next = createNode(40);
+
+    int target;
+    printf("Enter the value to search: ");
+    scanf("%d", &target);
+
+    if (searchValue(head, target))
+        printf("Value %d found in the linked list.\n", target);
+    else
+        printf("Value %d not found in the linked list.\n", target);
+
+    // Free the memory occupied by the linked list
+    struct Node *current = head;
+    while (current != NULL) {
+        struct Node *temp = current;
+        current = current->next;
+        free(temp);
+    }
+
+    return 0;
+}
+3.
+//Merge Two Sorted Lists: Write a recursive function to merge two sorted linked lists into a single sorted linked list. The function should compare the values of the nodes in both lists and recursively merge them to create a new sorted list.
+  #include <stdio.h>
+#include <stdlib.h>
+
+// Define a linked list node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Function to create a new node
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Recursive function to merge two sorted linked lists
+struct Node *mergeSortedLists(struct Node *list1, struct Node *list2) {
+    if (list1 == NULL)
+        return list2;
+    
+    if (list2 == NULL)
+        return list1;
+    
+    struct Node *result = NULL;
+    
+    if (list1->data <= list2->data) {
+        result = list1;
+        result->next = mergeSortedLists(list1->next, list2);
+    } else {
+        result = list2;
+        result->next = mergeSortedLists(list1, list2->next);
+    }
+    
+    return result;
+}
+
+// Function to display a linked list
+void displayList(struct Node *node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    // Create two sorted linked lists
+    struct Node *list1 = createNode(1);
+    list1->next = createNode(3);
+    list1->next->next = createNode(5);
+
+    struct Node *list2 = createNode(2);
+    list2->next = createNode(4);
+    list2->next->next = createNode(6);
+
+    printf("First sorted linked list: ");
+    displayList(list1);
+
+    printf("Second sorted linked list: ");
+    displayList(list2);
+
+    // Merge the two sorted lists
+    struct Node *mergedList = mergeSortedLists(list1, list2);
+
+    printf("Merged sorted linked list: ");
+    displayList(mergedList);
+
+    // Free the memory occupied by the linked lists
+    struct Node *current = mergedList;
+    while (current != NULL) {
+        struct Node *temp = current;
+        current = current->next;
+        free(temp);
+    }
+
+    return 0;
+}
+4.
+Reverse the Linked List: Implement a recursive function to reverse the linked list. The function should recursively reverse the rest of the list and adjust the next pointers as it traverses back.
+  #include <stdio.h>
+#include <stdlib.h>
+
+// Define a linked list node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Function to create a new node
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Recursive function to reverse a linked list
+struct Node *reverseList(struct Node *current, struct Node *prev) {
+    if (current == NULL)
+        return prev;
+    
+    struct Node *nextNode = current->next;
+    current->next = prev;
+    
+    return reverseList(nextNode, current);
+}
+
+// Function to display a linked list
+void displayList(struct Node *node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    // Create a linked list: 1 -> 2 -> 3 -> 4 -> NULL
+    struct Node *head = createNode(1);
+    head->next = createNode(2);
+    head->next->next = createNode(3);
+    head->next->next->next = createNode(4);
+
+    printf("Original linked list: ");
+    displayList(head);
+
+    // Reverse the linked list
+    struct Node *reversedHead = reverseList(head, NULL);
+
+    printf("Reversed linked list: ");
+    displayList(reversedHead);
+
+    // Free the memory occupied by the linked list
+    struct Node *current = reversedHead;
+    while (current != NULL) {
+        struct Node *temp = current;
+        current = current->next;
+        free(temp);
+    }
+
+    return 0;
+}
+5.
+Find the Middle Node: Write a recursive function to find the middle node of a linked list. The middle node is the one located at approximately the center of the list. You can use two pointers to traverse the list one moving one step at a time and the other moving two steps at a time.
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a linked list node structure
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Function to create a new node
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Recursive function to find the middle node of a linked list
+struct Node *findMiddle(struct Node *slow, struct Node *fast) {
+    if (fast == NULL || fast->next == NULL)
+        return slow;
+    
+    return findMiddle(slow->next, fast->next->next);
+}
+
+// Function to display a linked list
+void displayList(struct Node *node) {
+    while (node != NULL) {
+        printf("%d ", node->data);
+        node = node->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    // Create a linked list: 1 -> 2 -> 3 -> 4 -> 5 -> NULL
+    struct Node *head = createNode(1);
+    head->next = createNode(2);
+    head->next->next = createNode(3);
+    head->next->next->next = createNode(4);
+    head->next->next->next->next = createNode(5);
+
+    printf("Original linked list: ");
+    displayList(head);
+
+    // Find the middle node
+    struct Node *middleNode = findMiddle(head, head);
+
+    printf("Middle node value: %d\n", middleNode->data);
+
+    // Free the memory occupied by the linked list
+    struct Node *current = head;
+    while (current != NULL) {
+        struct Node *temp = current;
+        current = current->next;
+        free(temp);
+    }
+
+    return 0;
+}
+6.
+/*Parentheses Balancing: Implement two mutually recursive functions named "isOpenParenthesis" and "isBalanced" to check whether a given string of parentheses is balanced.
+
+a. The "isOpenParenthesis" function should call "isBalanced" to check the substring within the parentheses.
+
+b. The "isBalanced" function should call "isOpenParenthesis" to check if the opening parenthesis has a matching closing parenthesis.
+
+c. Prompt the user to input a string containing parentheses, and then call the "isBalanced" function to determine and display whether the parentheses are balanced.*/
+  #include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+bool isBalanced(const char *str, int start, int end); // Forward declaration
+
+bool isOpenParenthesis(const char *str, int index) {
+    if (str[index] == '(') {
+        int closingIndex = index;
+        return isBalanced(str, index + 1, closingIndex - 1);
+    } else if (str[index] == ')') {
+        return false; // Unmatched closing parenthesis
+    } else if (str[index] == '\0') {
+        return true; // Reached the end of the string
+    } else {
+        return isOpenParenthesis(str, index + 1);
+    }
+}
+
+bool isBalanced(const char *str, int start, int end) {
+    if (start > end) {
+        return true; // Empty substring is balanced
+    }
+
+    if (str[start] == '(') {
+        int closingIndex = start;
+        return isOpenParenthesis(str, closingIndex + 1) && isBalanced(str, start + 1, end);
+    } else if (str[start] == ')') {
+        return false; // Unmatched closing parenthesis
+    } else {
+        return isBalanced(str, start + 1, end);
+    }
+}
+
+int main() {
+    char input[100];
+
+    printf("Enter a string containing parentheses: ");
+    scanf("%s", input);
+
+    if (isBalanced(input, 0, strlen(input) - 1)) {
+        printf("The parentheses are balanced.\n");
+    } else {
+        printf("The parentheses are not balanced.\n");
+    }
+
+    return 0;
+}
+
+  
